@@ -1,6 +1,7 @@
 from typing import List
 from pprint import pprint
-from w1.utils import Stats, DataReader
+# from w1.utils import Stats, DataReader
+from utils import Stats, DataReader
 from tqdm import tqdm
 import os
 
@@ -9,6 +10,7 @@ class DataProcessor:
     def __init__(self, file_path: str) -> None:
         self._fp = file_path
         self._col_names = []
+        
         self._sep = ","
         self._stats = None
         self._file_name = os.path.basename(file_path)

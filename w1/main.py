@@ -1,5 +1,5 @@
 import constants
-from w1.data_processor import DataProcessor
+from data_processor import DataProcessor
 from pprint import pprint
 from typing import Dict
 from tqdm import tqdm
@@ -44,14 +44,30 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     }
     """
     ######################################## YOUR CODE HERE ##################################################
-    data_reader_gen = (DataProcessor.to_float(row[column_name]) for row in self.data_reader)
+    data_reader_gen = (row for row in dp.data_reader)
     _ = next(data_reader_gen)
+     
     
-    sum_ = 0
-    for val in tqdm(data_reader_gen):
-        sum_+=val
-    
-    return sum_ 
+    # find unique value in Country column 
+    country_set = set()
+    country_total_price = list()
+    for row in data_reader_gen:
+        country_set.add(row['Country'])
+        country_total_price.append((row['Country'],row['TotalPrice']))
+
+    def is_country(x,country):
+        if x[0] == country:
+            return float(x[1])
+        else:
+            return 0  
+
+    country_sum_dict = dict()
+    for country in country_set:
+        is_country_values = list(map(lambda x : is_country(x,country),country_total_price))
+        sum_ = sum(is_country_values)
+        country_sum_dict[country] = sum_
+        
+    return country_sum_dict
     ######################################## YOUR CODE HERE ##################################################
 
 
