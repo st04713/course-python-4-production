@@ -1,3 +1,6 @@
+# export PYTHONPATH=.
+# export PYTHONPATH=/workspace/course-python-4-production
+
 import time
 from typing import List, Dict
 from tqdm import tqdm
@@ -164,6 +167,14 @@ def main() -> List[Dict]:
     batches = batch_files(file_paths=file_paths, n_processes=n_processes)
 
     ######################################## YOUR CODE HERE ##################################################
+    with multiprocessing.Pool(processes=n_processes) as pool:
+        results = pool.starmap(run, zip(batches,range(n_processes)))
+
+    # ref: https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments
+
+    # Close the pool and wait for all the tasks to complete
+    pool.close()
+    pool.join()
 
     ######################################## YOUR CODE HERE ##################################################
 
@@ -171,9 +182,11 @@ def main() -> List[Dict]:
     print("Overall time taken : {}".format(en-st))
 
     # should return revenue data
-    return [{}]
+    # return [{}]
+    return results
 
 
 if __name__ == '__main__':
     res = main()
     pprint(res)
+
